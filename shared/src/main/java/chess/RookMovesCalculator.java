@@ -2,17 +2,16 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class RookMovesCalculator implements PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> possMoves = new ArrayList<>();
-        int[][] fourPossDirections = { {1,0}, {0,1}, {-1,0}, {0,-1} };
+        int[][] possibleDirections = { {1,0}, {0,1}, {-1,0}, {0,-1} };
 
-        for (int[] possDirection : fourPossDirections) {
-            int possNewRow = myPosition.getRow() + possDirection[0];
-            int possNewCol = myPosition.getColumn() + possDirection[1];
+        for (int[] possibleDirection : possibleDirections) {
+            int possNewRow = myPosition.getRow() + possibleDirection[0];
+            int possNewCol = myPosition.getColumn() + possibleDirection[1];
 
             while ((possNewRow >= 1 && possNewRow <= 8) && (possNewCol >= 1 && possNewCol <= 8)) {
                 ChessPosition possPosition = new ChessPosition(possNewRow, possNewCol);
@@ -25,8 +24,8 @@ public class RookMovesCalculator implements PieceMovesCalculator {
                     }
                     break;
                 }
-                possNewRow += possDirection[0];
-                possNewCol += possDirection[1];
+                possNewRow += possibleDirection[0];
+                possNewCol += possibleDirection[1];
             }
         }
         return possMoves;
