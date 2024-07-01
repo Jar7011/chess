@@ -44,6 +44,8 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
     }
+    
+
 
     @Override
     public boolean equals(Object o) {
