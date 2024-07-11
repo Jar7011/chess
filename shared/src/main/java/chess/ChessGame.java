@@ -51,16 +51,8 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ChessPiece currentPiece = board.getPiece(startPosition);
-        if (currentPiece == null) {
-            return null;
-        }
-        Collection<ChessMove> allMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
-        Collection<ChessMove> possibleMoves = new ArrayList<>();
-        for (ChessMove move : allMoves) {
-            ChessBoard tempBoard = board.cloneBoard();
-
-        }
+        // still need to implement
+        return null;
     }
 
     /**
@@ -84,21 +76,7 @@ public class ChessGame {
         if (kingPosition == null) {
             return false;
         }
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
-                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) {
-                    Collection<ChessMove> possibleMoves = currentPiece.pieceMoves(board, new ChessPosition(row, col));
-
-                    for (ChessMove possibleMove : possibleMoves) {
-                        if (possibleMove.getEndPosition() == kingPosition) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+        return isInDanger(kingPosition, teamColor);
     }
 
     /**
@@ -120,20 +98,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
-                if (currentPiece != null && currentPiece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> possibleMoves = currentPiece.pieceMoves(board, new ChessPosition(row, col));
-
-                    for (ChessMove possibleMove : possibleMoves) {
-                        ChessBoard newBoard = board.cloneBoard();
-
-                    }
-                }
-            }
-        }
-        return true;
+        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -154,6 +119,7 @@ public class ChessGame {
         return board;
     }
 
+    // Some helper functions
     private ChessPosition findKingPosition(TeamColor teamColor) {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
@@ -165,6 +131,25 @@ public class ChessGame {
         }
         return null;
     }
+
+    private boolean isInDanger(ChessPosition position, TeamColor teamColor) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
+                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) {
+                    Collection<ChessMove> possibleMoves = currentPiece.pieceMoves(board, new ChessPosition(row, col));
+
+                    for (ChessMove possibleMove : possibleMoves) {
+                        if (possibleMove.getEndPosition() == position) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public boolean equals(Object o) {

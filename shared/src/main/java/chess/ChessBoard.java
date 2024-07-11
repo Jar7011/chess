@@ -27,6 +27,10 @@ public class ChessBoard {
         squares[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
+    public void removePiece(ChessPosition position) {
+        squares[position.getRow() - 1][position.getColumn() - 1] = null;
+    }
+
     /**
      * Gets a chess piece on the chessboard
      *
@@ -71,15 +75,15 @@ public class ChessBoard {
     }
 
     public ChessBoard cloneBoard() {
-        ChessBoard clone = new ChessBoard();
+        ChessBoard boardClone = new ChessBoard();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (this.squares[i][j] != null) {
-                    clone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
+                    boardClone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
                 }
             }
         }
-        return clone;
+        return boardClone;
     }
 
     @Override
