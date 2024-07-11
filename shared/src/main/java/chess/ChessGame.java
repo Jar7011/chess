@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -53,8 +54,12 @@ public class ChessGame {
         ChessPiece currentPiece = board.getPiece(startPosition);
         if (currentPiece == null) {
             return null;
-        } else {
-            return currentPiece.pieceMoves(board, startPosition);
+        }
+        Collection<ChessMove> allMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
+        Collection<ChessMove> possibleMoves = new ArrayList<>();
+        for (ChessMove move : allMoves) {
+            ChessBoard tempBoard = board.cloneBoard();
+
         }
     }
 
@@ -82,9 +87,18 @@ public class ChessGame {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
+                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) {
+                    Collection<ChessMove> possibleMoves = currentPiece.pieceMoves(board, new ChessPosition(row, col));
 
+                    for (ChessMove possibleMove : possibleMoves) {
+                        if (possibleMove.getEndPosition() == kingPosition) {
+                            return true;
+                        }
+                    }
+                }
             }
         }
+        return false;
     }
 
     /**
@@ -119,6 +133,7 @@ public class ChessGame {
                 }
             }
         }
+        return true;
     }
 
     /**

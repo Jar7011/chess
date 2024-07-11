@@ -70,6 +70,18 @@ public class ChessBoard {
         }
     }
 
+    public ChessBoard cloneBoard() {
+        ChessBoard clone = new ChessBoard();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (this.squares[i][j] != null) {
+                    clone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
+                }
+            }
+        }
+        return clone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
