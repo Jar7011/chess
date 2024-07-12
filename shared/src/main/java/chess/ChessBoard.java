@@ -78,8 +78,8 @@ public class ChessBoard {
         ChessBoard boardClone = new ChessBoard();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (this.squares[i][j] != null) {
-                    boardClone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
+                if (squares[i][j] != null) {
+                    boardClone.squares[i][j] = new ChessPiece(squares[i][j].getTeamColor(), squares[i][j].getPieceType());
                 }
             }
         }
