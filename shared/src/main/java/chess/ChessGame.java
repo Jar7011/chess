@@ -54,7 +54,7 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece currentPiece = board.getPiece(startPosition);
         if (currentPiece == null) {
-            return null;
+            return new ArrayList<>();
         }
         Collection<ChessMove> allMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
         Collection<ChessMove> possibleMoves = new ArrayList<>();
@@ -82,24 +82,29 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+        ChessPosition position = move.getStartPosition();
+        Collection<ChessMove> validMoves = validMoves(position);
         if (!validMoves.contains(move)) {
-            throw new InvalidMoveException("Move not valid");
+            throw new InvalidMoveException("Your move is not valid");
         }
         ChessPiece pieceMoving = board.getPiece(move.getStartPosition());
+        if (pieceMoving.getTeamColor() != teamTurn) {
+            throw new InvalidMoveException("It's not your turn");
+        }
         if (move.getPromotionPiece() != null) {
             board.addPiece(move.getEndPosition(), new ChessPiece(teamTurn, move.getPromotionPiece()));
         } else {
             board.addPiece(move.getEndPosition(), pieceMoving);
         }
         board.removePiece(move.getStartPosition());
-
+        if (isInCheck(teamTurn)) {
+            throw new InvalidMoveException("After moving you are still in check");
+        }
         if (teamTurn == TeamColor.WHITE) {
             teamTurn = TeamColor.BLACK;
         } else {
             teamTurn = TeamColor.WHITE;
         }
-
     }
 
     /**
