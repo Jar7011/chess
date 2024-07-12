@@ -131,7 +131,7 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        return isStillInDanger(teamColor);
+        return isStillInDanger(teamColor, 0);
     }
 
     /**
@@ -142,20 +142,11 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        int stalemate = 1;
         if (isInCheck(teamColor)) {
             return false;
         }
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
-                if (currentPiece != null && currentPiece.getTeamColor() == teamColor){
-                    if (!validMoves(findKingPosition(board, teamColor)).isEmpty()){
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return isStillInDanger(teamColor, 1);
     }
 
     /**
@@ -207,13 +198,21 @@ public class ChessGame {
         return false;
     }
 
-    private boolean isStillInDanger(TeamColor teamColor) {
+    private boolean isStillInDanger(TeamColor teamColor, int stalemate) {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPiece currentPiece = board.getPiece(new ChessPosition(row, col));
-                if (currentPiece != null && currentPiece.getTeamColor() == teamColor){
-                    if (!validMoves(new ChessPosition(row, col)).isEmpty()){
-                        return false;
+                if (stalemate == 1) {
+                    if (currentPiece != null && currentPiece.getTeamColor() == teamColor) {
+                        if (!validMoves(findKingPosition(board, teamColor)).isEmpty()){
+                            return false;
+                        }
+                    }
+                } else {
+                    if (currentPiece != null && currentPiece.getTeamColor() == teamColor) {
+                        if (!validMoves(new ChessPosition(row, col)).isEmpty()){
+                            return false;
+                        }
                     }
                 }
             }
