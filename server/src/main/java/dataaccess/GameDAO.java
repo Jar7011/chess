@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface GameDAO {
 
-    public GameData createGame(String gameName);
+    public GameData createGame(GameData gameData);
 
     public GameData getGame(int gameID);
 

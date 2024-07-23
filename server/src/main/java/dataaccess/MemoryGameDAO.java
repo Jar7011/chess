@@ -10,11 +10,12 @@ import java.util.List;
 public class MemoryGameDAO implements GameDAO {
 
     private int gameID = 1;
-    final private HashMap<Integer, GameData> games = new HashMap<>();
+    private HashMap<Integer, GameData> games = new HashMap<>();
 
     @Override
-    public GameData createGame(String gameName) {
-        GameData newGame = new GameData(gameID++, null, null, gameName, new ChessGame());
+    public GameData createGame(GameData gameData) {
+        GameData newGame = new GameData(gameID++, gameData.whiteUsername(), gameData.blackUsername(),
+                                        gameData.gameName(), new ChessGame());
         games.put(newGame.gameID(), newGame);
         return newGame;
     }
