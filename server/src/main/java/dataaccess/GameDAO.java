@@ -12,5 +12,7 @@ public interface GameDAO {
 
     public Collection<GameData> listGames();
 
-    public void updateGame(GameData gameToUpdate);
+    public GameData updateGame(GameData game, String whiteUsername, String blackUsername);
+
+    public void clear();
 }
