@@ -7,6 +7,7 @@ import model.UserData;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.LoginResult;
+import response.LogoutResult;
 import response.RegisterResult;
 
 import java.util.Objects;
@@ -38,6 +39,14 @@ public class UserService {
             throw new DataAccessException("Error: unauthorized");
         }
         return new LoginResult(login.username(), getNewAuthToken(login.username()));
+    }
+
+    public LogoutResult logoutUser(String authToken) throws DataAccessException {
+        if (authData.getAuth(authToken) == null) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+        authData.deleteAuth(authToken);
+        return new LogoutResult("Logged out");
     }
 
     private String getNewAuthToken(String username) {
