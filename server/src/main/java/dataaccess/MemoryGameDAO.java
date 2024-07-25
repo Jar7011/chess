@@ -52,13 +52,13 @@ public class MemoryGameDAO implements GameDAO {
         games.remove(gameID);
     }
 
-    public void joinGame(int gameID, String whiteUsername, String blackUsername) throws DataAccessException {
-        if (blackUsername == null && getGame(gameID).blackUsername() == null) {
-            throw new DataAccessException("Can't do that");
-        }
-        if (whiteUsername == null && getGame(gameID).whiteUsername() == null) {
-            throw new DataAccessException("Can't do that");
-        }
+    public void joinGame(int gameID, String whiteUsername, String blackUsername) {
+//        if (blackUsername == null && getGame(gameID).blackUsername() == null) {
+//            throw new DataAccessException("Can't do that");
+//        }
+//        if (whiteUsername == null && getGame(gameID).whiteUsername() == null) {
+//            throw new DataAccessException("Can't do that");
+//        }
         GameData newGame = updateGame(getGame(gameID), whiteUsername, blackUsername);
         deleteGame(gameID);
         games.put(newGame.gameID(), newGame);

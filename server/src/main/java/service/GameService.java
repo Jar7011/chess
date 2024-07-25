@@ -38,6 +38,35 @@ public class GameService {
         return new CreateGameResult(gameData.createGame(request.gameName()).gameID());
     }
 
+    public JoinGameResult joinGame(JoinGameRequest request, String authToken) throws DataAccessException {
+        if (isTokenNull(authToken)) {
+            throw new DataAccessException("Error: unauthorized");
+        }
+        if (isGameNull(request)) {
+            throw new DataAccessException("Error: bad request");
+        }
+        if (isColorNotValid(request)) {
+            throw new DataAccessException("Error: bad request");
+        }
+        if (request.playerColor() == null) {
+            throw new DataAccessException("Spectating");
+        }
+        if (Objects.equals(request.playerColor(), "BLACK")) {
+            if (!isBlackNull(request) && !blackNameEqualsUsername(request, authToken)) {
+                throw new DataAccessException("Error: already there");
+            }
+            gameData.joinGame(request.gameID(), null, request.playerColor());
+            return new JoinGameResult("Joined as " + request.playerColor());
+        }
+        if (Objects.equals(request.playerColor(), "WHITE")) {
+            if (!isWhiteNull(request) && !whiteNameEqualsUsername(request, authToken)) {
+                throw new DataAccessException("Error: already there");
+            }
+        }
+        gameData.joinGame(request.gameID(), request.playerColor(), null);
+        return new JoinGameResult("Joined as " + request.playerColor());
+    }
+
     private boolean isTokenNull(String authToken) {
         return authData.getAuth(authToken) == null;
     }
@@ -46,24 +75,23 @@ public class GameService {
         return gameData.getGame(request.gameID()) == null;
     }
 
-    private boolean isUsernameNull(JoinGameRequest request, String color) {
-        if (Objects.equals(color, "WHITE")) {
-            return gameData.getGame(request.gameID()).whiteUsername() == null;
-        } else {
-            return gameData.getGame(request.gameID()).blackUsername() == null;
-        }
+    private boolean isWhiteNull(JoinGameRequest request) {
+        return gameData.getGame(request.gameID()).whiteUsername() == null;
     }
 
-    private boolean colorNameEqualsUsername(JoinGameRequest request, String color) {
-        if (Objects.equals(color, "WHITE")) {
-
-        }
+    private boolean isBlackNull(JoinGameRequest request) {
+        return gameData.getGame(request.gameID()).blackUsername() == null;
     }
 
-    public JoinGameResult joinGame(JoinGameRequest request, String authToken) throws DataAccessException {
-        if (isTokenNull(authToken)) {
-            throw new DataAccessException("Error: unauthorized");
-        }
-        if ()
+    private boolean whiteNameEqualsUsername(JoinGameRequest request, String authToken) {
+        return Objects.equals(gameData.getGame(request.gameID()).whiteUsername(), authData.getAuth(authToken).username());
+    }
+
+    private boolean blackNameEqualsUsername(JoinGameRequest request, String authToken) {
+        return Objects.equals(gameData.getGame(request.gameID()).blackUsername(), authData.getAuth(authToken).username());
+    }
+
+    private boolean isColorNotValid(JoinGameRequest request) {
+        return !Objects.equals(request.playerColor(), "WHITE") && !Objects.equals(request.playerColor(), "BLACK");
     }
 }

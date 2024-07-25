@@ -14,5 +14,7 @@ public interface GameDAO {
 
     public GameData updateGame(GameData game, String whiteUsername, String blackUsername);
 
+    public void joinGame(int gameID, String whiteUsername, String blackUsername);
+
     public void clear();
 }
