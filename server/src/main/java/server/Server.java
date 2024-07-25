@@ -1,10 +1,9 @@
 package server;
 
-import dataaccess.AuthDAO;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
-import dataaccess.UserDAO;
+import dataaccess.*;
+import handlers.ClearHandler;
 import handlers.UserHandler;
+import service.ClearService;
 import service.UserService;
 import spark.*;
 
@@ -12,8 +11,12 @@ public class Server {
 
     UserDAO user = new MemoryUserDAO();
     AuthDAO authorization = new MemoryAuthDAO();
-    UserService service = new UserService(user,authorization);
-    UserHandler userHandler = new UserHandler(service);
+    GameDAO game = new MemoryGameDAO();
+    UserService userService = new UserService(user,authorization);
+    ClearService clearService = new ClearService(user, authorization, game);
+    UserHandler userHandler = new UserHandler(userService);
+    ClearHandler clearHandler = new ClearHandler(clearService);
+
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -25,6 +28,7 @@ public class Server {
         Spark.post("/user", ((request, response) -> userHandler.registerHandler(request, response)));
         Spark.post("/session", ((request, response) -> userHandler.loginHandler(request, response)));
         Spark.delete("/session", ((request, response) -> userHandler.logoutHandler(request, response)));
+        Spark.delete("/db", ((request, response) -> clearHandler.ClearDatabase(request, response)));
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
