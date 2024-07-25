@@ -14,8 +14,8 @@ import java.util.Objects;
 
 public class UserService {
 
-    AuthDAO authData;
-    UserDAO userData;
+    private AuthDAO authData;
+    private UserDAO userData;
 
     public UserService(UserDAO user, AuthDAO authorization) {
         userData = user;

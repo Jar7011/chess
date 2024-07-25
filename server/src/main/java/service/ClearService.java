@@ -6,9 +6,9 @@ import dataaccess.UserDAO;
 
 public class ClearService {
 
-    AuthDAO authData;
-    GameDAO gameData;
-    UserDAO userData;
+    private AuthDAO authData;
+    private GameDAO gameData;
+    private UserDAO userData;
 
     public ClearService(UserDAO user, AuthDAO authorization, GameDAO game) {
         userData = user;
