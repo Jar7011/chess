@@ -1,4 +1,3 @@
 package response;
 
-public record ClearResult() {
-}
+public record ClearResult(String message) {}
