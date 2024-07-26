@@ -48,16 +48,24 @@ public class GameHandler {
         }
     }
 
-    public String joinGameHandler(Request request, Response response) throws DataAccessException, BadRequestException, ColorException {
+    public String joinGameHandler(Request request, Response response) throws ColorException, BadRequestException, DataAccessException {
         try {
             JoinGameRequest joinRequest = new Gson().fromJson(request.body(), JoinGameRequest.class);
             JoinGameResult result = service.joinGame(joinRequest, request.headers("authorization"));
             response.status(200);
             return new Gson().toJson(result);
-        } catch (DataAccessException accessException) {
+        }
+        catch (ColorException exception) {
+            response.status(403);
+            return new Gson().toJson(Map.of("message", exception.getMessage()));
+        }
+        catch (BadRequestException exception) {
+            response.status(400);
+            return new Gson().toJson(Map.of("message", exception.getMessage()));
+        }
+        catch (DataAccessException exception) {
             response.status(401);
-            return new Gson().toJson(Map.of("message", accessException.getMessage()));
+            return new Gson().toJson(Map.of("message", exception.getMessage()));
         }
     }
-
 }

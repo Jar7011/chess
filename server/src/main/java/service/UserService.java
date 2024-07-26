@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
+import dataaccess.BadRequestException;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.UserData;
@@ -28,7 +29,7 @@ public class UserService {
             throw new DataAccessException("Error: already taken");
         }
         if (register.username() == null || register.password() == null || register.email() == null) {
-            throw new DataAccessException("Error: bad request");
+            throw new BadRequestException("Error: bad request");
         }
         UserData newUser = new UserData(register.username(), register.password(), register.email());
         userData.createUser(newUser);

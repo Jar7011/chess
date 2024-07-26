@@ -1,8 +1,6 @@
 package service;
 
-import dataaccess.AuthDAO;
-import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
+import dataaccess.*;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import response.CreateGameResult;
@@ -43,22 +41,22 @@ public class GameService {
             throw new DataAccessException("Error: unauthorized");
         }
         if (isGameNull(request)) {
-            throw new DataAccessException("Error: bad request");
+            throw new BadRequestException("Error: bad request");
         }
         if (isColorNotValid(request)) {
-            throw new DataAccessException("Error: bad request");
+            throw new BadRequestException("Error: bad request");
         }
         if (request.playerColor() == null) {
-            throw new DataAccessException("Spectating");
+            throw new BadRequestException("Spectating");
         }
         if (Objects.equals(request.playerColor(), "BLACK")) {
             if (!isBlackNull(request) && !blackNameEqualsUsername(request, authToken)) {
-                throw new DataAccessException("Error: already there");
+                throw new ColorException("Error: already there");
             }
         }
         if (Objects.equals(request.playerColor(), "WHITE")) {
             if (!isWhiteNull(request) && !whiteNameEqualsUsername(request, authToken)) {
-                throw new DataAccessException("Error: already there");
+                throw new ColorException("Error: already there");
             }
 
         }

@@ -27,13 +27,13 @@ public class UserHandler {
     public String registerHandler(Request request, Response response) throws DataAccessException, BadRequestException {
         try {
             RegisterRequest register = new Gson().fromJson(request.body(), RegisterRequest.class);
-            if (register.username() == null || register.password() == null || register.email() == null) {
-                response.status(400);
-                return new Gson().toJson(Map.of("message", "Error: bad request"));
-            }
             RegisterResult result = service.registerUser(register);
             response.status(200);
             return new Gson().toJson(result);
+        }
+        catch (BadRequestException exception) {
+            response.status(400);
+            return new Gson().toJson(Map.of("message", exception.getMessage()));
         }
         catch (DataAccessException exception) {
             response.status(403);

@@ -39,17 +39,21 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void updateGame(int gameID, String color, String authToken) {
-        GameData game = games.get(gameID);
         AuthData data = authData.getAuth(authToken);
+        GameData game = games.get(gameID);
+        GameData updatedGame = game;
         if (Objects.equals(color, "BLACK")) {
-            GameData newGame = new GameData(gameID, game.whiteUsername(), data.username(),
+            updatedGame = new GameData(gameID, game.whiteUsername(), data.username(),
                     game.gameName(), game.game());
-            games.put(gameID, newGame);
         } else if (Objects.equals(color, "WHITE")) {
-            GameData newGame = new GameData(gameID, data.username(), game.blackUsername(),
+            updatedGame = new GameData(gameID, data.username(), game.blackUsername(),
                     game.gameName(), game.game());
-            games.put(gameID, newGame);
         }
+        games.put(gameID, updatedGame);
+    }
+
+    private void makeUpdate(int gameID, GameData gameData, AuthData authData) {
+
     }
 
     @Override
