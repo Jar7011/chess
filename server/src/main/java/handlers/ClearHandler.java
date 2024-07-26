@@ -14,7 +14,7 @@ public class ClearHandler {
         service = clearService;
     }
 
-    public String ClearDatabase(Request request, Response response) throws DataAccessException {
+    public String clearDatabase(Request request, Response response) throws DataAccessException {
         service.clear();
         response.status(200);
         return new Gson().toJson(null);

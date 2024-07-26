@@ -52,10 +52,6 @@ public class MemoryGameDAO implements GameDAO {
         games.put(gameID, updatedGame);
     }
 
-    private void makeUpdate(int gameID, GameData gameData, AuthData authData) {
-
-    }
-
     @Override
     public void clear() {
         games.clear();

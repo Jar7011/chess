@@ -4,7 +4,6 @@ import dataaccess.*;
 import handlers.ClearHandler;
 import handlers.GameHandler;
 import handlers.UserHandler;
-import model.AuthData;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
@@ -30,7 +29,7 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
         //Spark.delete("/db", );
-        Spark.delete("/db", ((request, response) -> clearHandler.ClearDatabase(request, response)));
+        Spark.delete("/db", ((request, response) -> clearHandler.clearDatabase(request, response)));
         Spark.post("/user", ((request, response) -> userHandler.registerHandler(request, response)));
         Spark.post("/session", ((request, response) -> userHandler.loginHandler(request, response)));
         Spark.delete("/session", ((request, response) -> userHandler.logoutHandler(request, response)));
