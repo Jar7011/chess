@@ -12,9 +12,9 @@ public interface GameDAO {
 
     public Collection<GameData> listGames();
 
-    public GameData updateGame(GameData game, String whiteUsername, String blackUsername);
+    public void updateGame(int gameID, String color, String authToken);
 
-    public void joinGame(int gameID, String whiteUsername, String blackUsername);
+    //public void joinGame(int gameID, String color, String authToken);
 
     public void clear();
 }

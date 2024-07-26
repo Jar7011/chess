@@ -4,6 +4,7 @@ import dataaccess.*;
 import handlers.ClearHandler;
 import handlers.GameHandler;
 import handlers.UserHandler;
+import model.AuthData;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
@@ -13,7 +14,7 @@ public class Server {
 
     UserDAO user = new MemoryUserDAO();
     AuthDAO authorization = new MemoryAuthDAO();
-    GameDAO game = new MemoryGameDAO();
+    GameDAO game = new MemoryGameDAO(authorization);
     UserService userService = new UserService(user,authorization);
     ClearService clearService = new ClearService(user, authorization, game);
     GameService gameService = new GameService(authorization, game);
@@ -29,10 +30,10 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
         //Spark.delete("/db", );
+        Spark.delete("/db", ((request, response) -> clearHandler.ClearDatabase(request, response)));
         Spark.post("/user", ((request, response) -> userHandler.registerHandler(request, response)));
         Spark.post("/session", ((request, response) -> userHandler.loginHandler(request, response)));
         Spark.delete("/session", ((request, response) -> userHandler.logoutHandler(request, response)));
-        Spark.delete("/db", ((request, response) -> clearHandler.ClearDatabase(request, response)));
         Spark.get("/game", ((request, response) -> gameHandler.listGameHandler(request, response)));
         Spark.post("/game", ((request, response) -> gameHandler.createGameHandler(request, response)));
         Spark.put("/game", ((request, response) -> gameHandler.joinGameHandler(request, response)));

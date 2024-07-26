@@ -10,6 +10,7 @@ import response.LoginResult;
 import response.LogoutResult;
 import response.RegisterResult;
 
+import javax.xml.crypto.Data;
 import java.util.Objects;
 
 public class UserService {
@@ -26,16 +27,19 @@ public class UserService {
         if (userData.getUser(register.username()) != null) {
             throw new DataAccessException("Error: already taken");
         }
+        if (register.username() == null || register.password() == null || register.email() == null) {
+            throw new DataAccessException("Error: bad request");
+        }
         UserData newUser = new UserData(register.username(), register.password(), register.email());
         userData.createUser(newUser);
         return new RegisterResult(newUser.username(), getNewAuthToken(newUser.username()));
     }
 
     public LoginResult loginUser(LoginRequest login) throws DataAccessException {
-        if (!Objects.equals(userData.getUser(login.username()).password(), login.password())) {
+        if (userData.getUser(login.username()) == null) {
             throw new DataAccessException("Error: unauthorized");
         }
-        if (userData.getUser(login.username()) == null) {
+        if (!Objects.equals(userData.getUser(login.username()).password(), login.password())) {
             throw new DataAccessException("Error: unauthorized");
         }
         return new LoginResult(login.username(), getNewAuthToken(login.username()));

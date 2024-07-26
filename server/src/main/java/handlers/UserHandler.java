@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataaccess.BadRequestException;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
@@ -23,9 +24,13 @@ public class UserHandler {
         service = userService;
     }
 
-    public String registerHandler(Request request, Response response) throws DataAccessException {
+    public String registerHandler(Request request, Response response) throws DataAccessException, BadRequestException {
         try {
             RegisterRequest register = new Gson().fromJson(request.body(), RegisterRequest.class);
+            if (register.username() == null || register.password() == null || register.email() == null) {
+                response.status(400);
+                return new Gson().toJson(Map.of("message", "Error: bad request"));
+            }
             RegisterResult result = service.registerUser(register);
             response.status(200);
             return new Gson().toJson(result);

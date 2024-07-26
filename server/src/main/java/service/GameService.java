@@ -55,15 +55,14 @@ public class GameService {
             if (!isBlackNull(request) && !blackNameEqualsUsername(request, authToken)) {
                 throw new DataAccessException("Error: already there");
             }
-            gameData.joinGame(request.gameID(), null, request.playerColor());
-            return new JoinGameResult("Joined as " + request.playerColor());
         }
         if (Objects.equals(request.playerColor(), "WHITE")) {
             if (!isWhiteNull(request) && !whiteNameEqualsUsername(request, authToken)) {
                 throw new DataAccessException("Error: already there");
             }
+
         }
-        gameData.joinGame(request.gameID(), request.playerColor(), null);
+        gameData.updateGame(request.gameID(), request.playerColor(), authToken);
         return new JoinGameResult("Joined as " + request.playerColor());
     }
 
