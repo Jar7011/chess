@@ -36,14 +36,7 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
                     continue;
                 }
                 if (pieceAlreadyThere == null) {
-                    if (promoteRow == possNewRow) {
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.BISHOP));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.ROOK));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.QUEEN));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.KNIGHT));
-                    } else {
-                        possMoves.add(new ChessMove(myPosition, possPosition, null));
-                    }
+                    addMove(possMoves, myPosition, possPosition, promoteRow, possNewRow);
                 } else {
                     break;
                 }
@@ -57,18 +50,24 @@ public class PawnMovesCalculator implements PieceMovesCalculator {
             if ((possNewRow >= 1 && possNewRow <= 8) && (possNewCol >= 1 && possNewCol <= 8)) {
                 ChessPosition possPosition = new ChessPosition(possNewRow, possNewCol);
                 ChessPiece otherPieceAlreadyThere = board.getPiece(possPosition);
-                if ((otherPieceAlreadyThere != null) && (otherPieceAlreadyThere.getTeamColor() != board.getPiece(myPosition).getTeamColor())) {
-                    if (promoteRow == possNewRow) {
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.BISHOP));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.ROOK));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.QUEEN));
-                        possMoves.add(new ChessMove(myPosition, possPosition, ChessPiece.PieceType.KNIGHT));
-                    } else {
-                        possMoves.add(new ChessMove(myPosition, possPosition, null));
-                    }
+                if ((otherPieceAlreadyThere != null) &&
+                    (otherPieceAlreadyThere.getTeamColor() != board.getPiece(myPosition).getTeamColor())) {
+                    addMove(possMoves, myPosition, possPosition, promoteRow, possNewRow);
                 }
             }
         }
         return possMoves;
+    }
+
+    private void addMove(Collection<ChessMove> possMoves, ChessPosition startPosition,
+                         ChessPosition endPosition, int promoteRow, int possNewRow) {
+        if (promoteRow == possNewRow) {
+            possMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.BISHOP));
+            possMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.ROOK));
+            possMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.QUEEN));
+            possMoves.add(new ChessMove(startPosition, endPosition, ChessPiece.PieceType.KNIGHT));
+        } else {
+            possMoves.add(new ChessMove(startPosition, endPosition, null));
+        }
     }
 }
