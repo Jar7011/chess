@@ -34,4 +34,5 @@ public class MoveFunctionsCalculator implements PieceMovesCalculator {
         }
         return possMoves;
     }
+
 }
