@@ -35,4 +35,21 @@ public class MoveFunctionsCalculator implements PieceMovesCalculator {
         return possMoves;
     }
 
+    public Collection<ChessMove> calculateMovesKK(ChessBoard board, ChessPosition myPosition, int[][] directions) {
+        Collection<ChessMove> possMoves = new ArrayList<>();
+        for (int[] direction : directions) {
+            int possNewRow = myPosition.getRow() + direction[0];
+            int possNewCol = myPosition.getColumn() + direction[1];
+
+            if ((possNewRow >= 1 && possNewRow <= 8) && (possNewCol >= 1 && possNewCol <= 8)) {
+                ChessPosition possPosition = new ChessPosition(possNewRow, possNewCol);
+                ChessPiece pieceAlreadyThere = board.getPiece(possPosition);
+                if ((pieceAlreadyThere == null) || (pieceAlreadyThere.getTeamColor() != board.getPiece(myPosition).getTeamColor())) {
+                    possMoves.add(new ChessMove(myPosition, possPosition, null));
+                }
+            }
+        }
+        return possMoves;
+    }
+
 }
