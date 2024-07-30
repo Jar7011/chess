@@ -1,9 +1,8 @@
 package dataaccess;
 
-public class ResponseException extends Throwable {
+public class ResponseException extends Exception {
 
     public ResponseException(int statusCode, String message) {
         super(statusCode + ": " + message);
     }
-
 }

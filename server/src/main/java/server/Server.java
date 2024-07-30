@@ -11,7 +11,7 @@ import spark.*;
 
 public class Server {
 
-    UserDAO user = new MemoryUserDAO();
+    UserDAO user = new SQLUserDAO();
     AuthDAO authorization = new MemoryAuthDAO();
     GameDAO game = new MemoryGameDAO(authorization);
     UserService userService = new UserService(user,authorization);
