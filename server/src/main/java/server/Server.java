@@ -12,7 +12,7 @@ import spark.*;
 public class Server {
 
     UserDAO user = new SQLUserDAO();
-    AuthDAO authorization = new MemoryAuthDAO();
+    AuthDAO authorization = new SQLAuthDAO();
     GameDAO game = new MemoryGameDAO(authorization);
     UserService userService = new UserService(user,authorization);
     ClearService clearService = new ClearService(user, authorization, game);

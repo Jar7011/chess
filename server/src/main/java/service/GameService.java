@@ -64,7 +64,7 @@ public class GameService {
         return new JoinGameResult("Joined as " + request.playerColor());
     }
 
-    private boolean isTokenNull(String authToken) {
+    private boolean isTokenNull(String authToken) throws DataAccessException {
         return authData.getAuth(authToken) == null;
     }
 
@@ -80,11 +80,11 @@ public class GameService {
         return gameData.getGame(request.gameID()).blackUsername() == null;
     }
 
-    private boolean whiteNameEqualsUsername(JoinGameRequest request, String authToken) {
+    private boolean whiteNameEqualsUsername(JoinGameRequest request, String authToken) throws DataAccessException {
         return Objects.equals(gameData.getGame(request.gameID()).whiteUsername(), authData.getAuth(authToken).username());
     }
 
-    private boolean blackNameEqualsUsername(JoinGameRequest request, String authToken) {
+    private boolean blackNameEqualsUsername(JoinGameRequest request, String authToken) throws DataAccessException {
         return Objects.equals(gameData.getGame(request.gameID()).blackUsername(), authData.getAuth(authToken).username());
     }
 

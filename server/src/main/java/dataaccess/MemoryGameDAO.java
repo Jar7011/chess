@@ -38,7 +38,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public void updateGame(int gameID, String color, String authToken) {
+    public void updateGame(int gameID, String color, String authToken) throws DataAccessException {
         AuthData data = authData.getAuth(authToken);
         GameData game = games.get(gameID);
         GameData updatedGame = game;

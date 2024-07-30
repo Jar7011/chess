@@ -12,7 +12,7 @@ public interface GameDAO {
 
     public Collection<GameData> listGames();
 
-    public void updateGame(int gameID, String color, String authToken);
+    public void updateGame(int gameID, String color, String authToken) throws DataAccessException;
 
     //public void joinGame(int gameID, String color, String authToken);
 

@@ -54,7 +54,7 @@ public class UserService {
         return new LogoutResult("Logged out");
     }
 
-    private String getNewAuthToken(String username) {
+    private String getNewAuthToken(String username) throws DataAccessException {
         return authData.createAuth(username);
     }
 
