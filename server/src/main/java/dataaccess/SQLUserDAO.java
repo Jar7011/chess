@@ -28,10 +28,9 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-
     @Override
     public void createUser(UserData userData) throws DataAccessException {
-        var statement = "INSERT INTO users (username, password, email) VALUES (?, ?, ?);";
+        String statement = "INSERT INTO users (username, password, email) VALUES (?, ?, ?);";
         executeUpdate(statement, userData.username(), userData.password(), userData.email());
     }
 
@@ -60,7 +59,7 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public void clear() throws DataAccessException{
-        String statement = "TRUNCATE users"; //think about using truncate users
+        String statement = "TRUNCATE users";
         executeUpdate(statement);
     }
 

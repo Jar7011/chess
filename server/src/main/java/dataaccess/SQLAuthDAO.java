@@ -12,7 +12,7 @@ public class SQLAuthDAO implements AuthDAO {
 
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS auths (
+            CREATE TABLE IF NOT EXISTS authData (
               `authToken` varchar(256) NOT NULL,
               `username` varchar(256) NOT NULL,
               PRIMARY KEY (`authToken`)
@@ -31,7 +31,7 @@ public class SQLAuthDAO implements AuthDAO {
     @Override
     public String createAuth(String username) throws DataAccessException {
         String newTokenString = UUID.randomUUID().toString();
-        String statement = "INSERT INTO authData (token, username) VALUES (?, ?)";
+        String statement = "INSERT INTO authData (authToken, username) VALUES (?, ?)";
         executeUpdate(statement, newTokenString, username);
         return newTokenString;
     }
@@ -39,7 +39,7 @@ public class SQLAuthDAO implements AuthDAO {
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            String statement = "SELECT username, password, email FROM users WHERE username=?";
+            String statement = "SELECT authToken, username FROM authData WHERE authToken=?;";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setString(1, authToken);
                 try (var rs = ps.executeQuery()) {
@@ -59,13 +59,15 @@ public class SQLAuthDAO implements AuthDAO {
     }
 
     @Override
-    public void deleteAuth(String authToken) {
-
+    public void deleteAuth(String authToken) throws DataAccessException {
+        String statement = "DELETE FROM authData WHERE authToken=?;";
+        executeUpdate(statement, authToken);
     }
 
     @Override
-    public void clear() {
-
+    public void clear() throws DataAccessException {
+        String statement = "TRUNCATE authData";
+        executeUpdate(statement);
     }
 
     private void executeUpdate(String statement, Object... params) throws DataAccessException {
