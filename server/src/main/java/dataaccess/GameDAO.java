@@ -8,7 +8,7 @@ public interface GameDAO {
 
     public GameData createGame(String gameName) throws DataAccessException;
 
-    public GameData getGame(int gameID);
+    public GameData getGame(int gameID) throws DataAccessException;
 
     public Collection<GameData> listGames();
 

@@ -68,15 +68,15 @@ public class GameService {
         return authData.getAuth(authToken) == null;
     }
 
-    private boolean isGameNull(JoinGameRequest request) {
+    private boolean isGameNull(JoinGameRequest request) throws DataAccessException {
         return gameData.getGame(request.gameID()) == null;
     }
 
-    private boolean isWhiteNull(JoinGameRequest request) {
+    private boolean isWhiteNull(JoinGameRequest request) throws DataAccessException {
         return gameData.getGame(request.gameID()).whiteUsername() == null;
     }
 
-    private boolean isBlackNull(JoinGameRequest request) {
+    private boolean isBlackNull(JoinGameRequest request) throws DataAccessException {
         return gameData.getGame(request.gameID()).blackUsername() == null;
     }
 

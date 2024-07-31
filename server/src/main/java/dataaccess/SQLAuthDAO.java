@@ -10,18 +10,17 @@ import static java.sql.Types.NULL;
 
 public class SQLAuthDAO implements AuthDAO {
 
-    private final String[] createStatements = {
-            """
+    public SQLAuthDAO() {
+        try {
+            String[] createStatements = {
+                    """
             CREATE TABLE IF NOT EXISTS authData (
               `authToken` varchar(256) NOT NULL,
               `username` varchar(256) NOT NULL,
               PRIMARY KEY (`authToken`)
             );
             """
-    };
-
-    public SQLAuthDAO() {
-        try {
+            };
             DatabaseManager.configureDatabase(createStatements);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -47,8 +46,7 @@ public class SQLAuthDAO implements AuthDAO {
                         String newAuthToken = rs.getString("authToken");
                         String username = rs.getString("username");
                         return new AuthData(newAuthToken, username);
-                    }
-                    else {
+                    } else {
                         return null;
                     }
                 }

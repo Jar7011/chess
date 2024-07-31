@@ -14,8 +14,12 @@ import static java.sql.Types.NULL;
 public class SQLGameDAO implements GameDAO {
 
     private AuthDAO authData;
-    private final String[] createStatements = {
-            """
+
+    public SQLGameDAO(AuthDAO authDAO) {
+        authData = authDAO;
+        try {
+            String[] createStatements = {
+                    """
             CREATE TABLE IF NOT EXISTS gameData (
               `id` int NOT NULL AUTO_INCREMENT,
               `whiteUsername` varchar(256),
@@ -25,11 +29,7 @@ public class SQLGameDAO implements GameDAO {
               PRIMARY KEY (`id`)
             );
             """
-    };
-
-    public SQLGameDAO(AuthDAO authDAO) {
-        authData = authDAO;
-        try {
+            };
             DatabaseManager.configureDatabase(createStatements);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,8 +46,28 @@ public class SQLGameDAO implements GameDAO {
     }
 
     @Override
-    public GameData getGame(int gameID) {
-        return null;
+    public GameData getGame(int gameID) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            String statement = "SELECT * FROM gameData WHERE id=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setInt(1, gameID);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String whiteUsername = rs.getString("whiteUsername");
+                        String blackUsername = rs.getString("blackUsername");
+                        String gameName = rs.getString("gameName");
+                        String game = rs.getString("game");
+                        ChessGame newGame = new Gson().fromJson(game, ChessGame.class);
+                        int id = rs.getInt("id");
+                        return new GameData(id, whiteUsername, blackUsername, gameName, newGame);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
+        }
     }
 
     @Override

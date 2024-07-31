@@ -9,8 +9,10 @@ import static java.sql.Types.NULL;
 
 public class SQLUserDAO implements UserDAO {
 
-    private final String[] createStatements = {
-            """
+    public SQLUserDAO() {
+        try {
+            String[] createStatements = {
+                    """
             CREATE TABLE IF NOT EXISTS userData (
               `username` varchar(256) NOT NULL,
               `password` varchar(256) NOT NULL,
@@ -18,10 +20,7 @@ public class SQLUserDAO implements UserDAO {
               PRIMARY KEY (`username`)
             );
             """
-    };
-
-    public SQLUserDAO() {
-        try {
+            };
             DatabaseManager.configureDatabase(createStatements);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,8 +45,7 @@ public class SQLUserDAO implements UserDAO {
                         String password = rs.getString("password");
                         String email = rs.getString("email");
                         return new UserData(newUsername, password, email);
-                    }
-                    else {
+                    } else {
                         return null;
                     }
                 }
