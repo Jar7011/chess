@@ -16,5 +16,5 @@ public interface GameDAO {
 
     //public void joinGame(int gameID, String color, String authToken);
 
-    public void clear();
+    public void clear() throws DataAccessException;
 }
