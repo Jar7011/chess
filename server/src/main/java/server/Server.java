@@ -13,7 +13,7 @@ public class Server {
 
     UserDAO user = new SQLUserDAO();
     AuthDAO authorization = new SQLAuthDAO();
-    GameDAO game = new MemoryGameDAO(authorization);
+    GameDAO game = new SQLGameDAO(authorization);
     UserService userService = new UserService(user,authorization);
     ClearService clearService = new ClearService(user, authorization, game);
     GameService gameService = new GameService(authorization, game);
