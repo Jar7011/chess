@@ -10,20 +10,20 @@ import static java.sql.Types.NULL;
 public class SQLUserDAO implements UserDAO {
 
     public SQLUserDAO() {
+        String[] createStatements = {
+        """
+        CREATE TABLE IF NOT EXISTS userData (
+          `username` varchar(256) NOT NULL,
+          `password` varchar(256) NOT NULL,
+          `email` varchar(256) NOT NULL,
+          PRIMARY KEY (`username`)
+        );
+        """
+        };
         try {
-            String[] createStatements = {
-                    """
-            CREATE TABLE IF NOT EXISTS userData (
-              `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL,
-              `email` varchar(256) NOT NULL,
-              PRIMARY KEY (`username`)
-            );
-            """
-            };
             DatabaseManager.configureDatabase(createStatements);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ResponseException | DataAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,8 +77,8 @@ public class SQLUserDAO implements UserDAO {
                 }
                 ps.executeUpdate();
             }
-        } catch (SQLException | DataAccessException e) {
-            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+        } catch (SQLException exception) {
+            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, exception.getMessage()));
         }
     }
 }

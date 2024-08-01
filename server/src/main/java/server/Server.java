@@ -21,6 +21,9 @@ public class Server {
     ClearHandler clearHandler = new ClearHandler(clearService);
     GameHandler gameHandler = new GameHandler(gameService);
 
+    public Server() {
+    }
+
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);

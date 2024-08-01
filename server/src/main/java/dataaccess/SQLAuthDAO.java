@@ -11,19 +11,19 @@ import static java.sql.Types.NULL;
 public class SQLAuthDAO implements AuthDAO {
 
     public SQLAuthDAO() {
+        String[] createStatements = {
+        """
+        CREATE TABLE IF NOT EXISTS authData (
+          `authToken` varchar(256) NOT NULL,
+          `username` varchar(256) NOT NULL,
+          PRIMARY KEY (`authToken`)
+        );
+        """
+        };
         try {
-            String[] createStatements = {
-                    """
-            CREATE TABLE IF NOT EXISTS authData (
-              `authToken` varchar(256) NOT NULL,
-              `username` varchar(256) NOT NULL,
-              PRIMARY KEY (`authToken`)
-            );
-            """
-            };
             DatabaseManager.configureDatabase(createStatements);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ResponseException | DataAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -84,8 +84,8 @@ public class SQLAuthDAO implements AuthDAO {
                 }
                 ps.executeUpdate();
             }
-        } catch (SQLException | DataAccessException e) {
-            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+        } catch (SQLException exception) {
+            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, exception.getMessage()));
         }
     }
 }
