@@ -2,11 +2,14 @@ package dataaccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import model.AuthData;
 import model.GameData;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
@@ -38,7 +41,7 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public GameData createGame(String gameName) throws DataAccessException {
-        String statement = "INSERT INTO games (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?);";
+        String statement = "INSERT INTO gameData (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?);";
         ChessGame newGame = new ChessGame();
         String json = new Gson().toJson(newGame);
         int id = executeUpdate(statement, null, null, gameName, json);
@@ -71,13 +74,59 @@ public class SQLGameDAO implements GameDAO {
     }
 
     @Override
-    public Collection<GameData> listGames() {
-        return List.of();
+    public Collection<GameData> listGames() throws DataAccessException {
+        ArrayList<GameData> games = new ArrayList<>();
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT id, game FROM gameData";
+            try (var ps = conn.prepareStatement(statement)) {
+                try (var rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        int id = rs.getInt("id");
+                        String whiteUsername = rs.getString("whiteUsername");
+                        String blackUsername = rs.getString("blackUsername");
+                        String gameName = rs.getString("gameName");
+                        String game = rs.getString("game");
+                        ChessGame newGame = new Gson().fromJson(game, ChessGame.class);
+                        games.add(new GameData(id, whiteUsername, blackUsername, gameName, newGame));
+                    }
+                }
+            }
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
+        }
+        return games;
     }
 
     @Override
     public void updateGame(int gameID, String color, String authToken) throws DataAccessException {
+//        GameData game = getGame(gameID);
+//        var statement = "";
+//        if (Objects.equals(color, "BLACK")) {
+//            statement = "UPDATE games SET blackUsername=? WHERE id=?";
+//        } else if (Objects.equals(color, "WHITE")) {
+//            statement = "UPDATE games SET whiteUsername=? WHERE id=?";
+//        }
+//        AuthData auth = authData.getAuth(authToken);
+//        executeUpdate(statement, auth.username(), gameID);
+        try (var conn = DatabaseManager.getConnection()) {
+            String statement = null;
+            if (color.equals("WHITE")) {
+                statement = "UPDATE gameData SET whiteUsername=? WHERE id=?";
+            } else if (color.equals("BLACK")) {
+                statement = "UPDATE gameData SET blackUsername=? WHERE id=?";
+            }
+            try (var ps = conn.prepareStatement(statement)) {
+                AuthData user = this.authData.getAuth(authToken);
+                ps.setString(1, user.username());
+                ps.setInt(2, gameID);
 
+                if (getGame(gameID) != null) {
+                    ps.executeUpdate();
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
@@ -102,10 +151,10 @@ public class SQLGameDAO implements GameDAO {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
-                return 0;
             }
         } catch (SQLException | DataAccessException e) {
             throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
         }
+        return -1;
     }
 }
