@@ -1,5 +1,6 @@
 package dataaccess;
 
+import model.AuthData;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -68,14 +69,10 @@ public class SQLUserDAO implements UserDAO {
             try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (var i = 0; i < params.length; i++) {
                     var param = params[i];
-                    switch (param) {
-                        case String p -> ps.setString(i + 1, p);
-                        case Integer p -> ps.setInt(i + 1, p);
-                        case UserData p -> ps.setString(i + 1, p.toString());
-                        case null -> ps.setNull(i + 1, NULL);
-                        default -> {
-                        }
-                    }
+                    if (param instanceof String p) { ps.setString(i + 1, p); }
+                    else if (param instanceof Integer p) { ps.setInt(i + 1, p); }
+                    else if (param instanceof UserData p) { ps.setString(i + 1, p.toString()); }
+                    else if (param == null) { ps.setNull(i + 1, NULL); }
                 }
                 ps.executeUpdate();
             }
