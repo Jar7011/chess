@@ -1,3 +1,5 @@
+package serverFacade;
+
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
 import request.RegisterRequest;
@@ -20,7 +22,6 @@ public class ServerFacade {
         serverUrl = url;
     }
 
-
     public RegisterResult register(RegisterRequest request) throws ResponseException {
         var path = "/user";
         var response = this.makeRequest("POST", path, request, RegisterResult.class);
@@ -28,7 +29,10 @@ public class ServerFacade {
         return response;
     }
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
+
+
+    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass)
+            throws ResponseException {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
