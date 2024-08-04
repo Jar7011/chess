@@ -1,15 +1,17 @@
 package serverFacade;
 
-import ui.Prelogin;
+import ui.PreloginUI;
 import static ui.EscapeSequences.*;
 import java.util.Scanner;
 
 public class Repl {
 
-    public Prelogin menu;
+    public PreloginUI menu;
+    public static String username;
+    public static String authToken;
 
     public Repl(String serverUrl) {
-        menu = new Prelogin(serverUrl);
+        menu = new PreloginUI(serverUrl);
     }
 
     public void run() {
