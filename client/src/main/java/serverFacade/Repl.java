@@ -15,7 +15,7 @@ public class Repl {
     }
 
     public void run() {
-        System.out.println("\uD83D\uDC36 Welcome to the pet store. Sign in to start.");
+        System.out.println(BLACK_KING + "Welcome to Chess Game. Sign in to start.");
         System.out.print(menu.help());
 
         Scanner scanner = new Scanner(System.in);

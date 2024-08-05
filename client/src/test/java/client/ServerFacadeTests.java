@@ -1,18 +1,30 @@
 package client;
 
+import dataaccess.ResponseException;
+import model.UserData;
 import org.junit.jupiter.api.*;
+import request.RegisterRequest;
+import response.RegisterResult;
 import server.Server;
+import serverFacade.ServerFacade;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ServerFacadeTests {
 
     private static Server server;
+    private static ServerFacade serverFacade;
+
+    private final UserData testUser = new UserData("username", "password", "email");
 
     @BeforeAll
     public static void init() {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
+        var url = "http://localhost:" + port;
+        serverFacade = new ServerFacade(url);
     }
 
     @AfterAll
@@ -24,6 +36,13 @@ public class ServerFacadeTests {
     @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
+    }
+
+    @Test
+    public void passRegister() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        RegisterResult response = serverFacade.register(user);
+        assertEquals("username", response.username());
     }
 
 }
