@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataaccess.ResponseException;
 import request.RegisterRequest;
 import response.RegisterResult;
+import response.ClearResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,11 @@ public class ServerFacade {
         var response = this.makeRequest("POST", path, request, RegisterResult.class);
         authToken = response.authToken();
         return response;
+    }
+
+    public void clear() throws ResponseException {
+        var path = "/db";
+        this.makeRequest("DELETE", path, null, ClearResult.class);
     }
 
 

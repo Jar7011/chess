@@ -27,11 +27,15 @@ public class ServerFacadeTests {
         serverFacade = new ServerFacade(url);
     }
 
+    @BeforeEach
+    public void clear() throws ResponseException {
+        serverFacade.clear();
+    }
+
     @AfterAll
     static void stopServer() {
         server.stop();
     }
-
 
     @Test
     public void sampleTest() {
