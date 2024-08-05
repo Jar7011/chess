@@ -10,8 +10,7 @@ import response.RegisterResult;
 import server.Server;
 import serverFacade.ServerFacade;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
@@ -69,4 +68,13 @@ public class ServerFacadeTests {
         assertThrows(ResponseException.class, () -> serverFacade.login(request));
     }
 
+    @Test
+    public void passLogout() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        serverFacade.login(request);
+        serverFacade.logout();
+        assertNull(serverFacade.getAuthToken());
+    }
 }
