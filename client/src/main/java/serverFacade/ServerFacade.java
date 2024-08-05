@@ -2,7 +2,9 @@ package serverFacade;
 
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
+import request.LoginRequest;
 import request.RegisterRequest;
+import response.LoginResult;
 import response.RegisterResult;
 import response.ClearResult;
 
@@ -25,7 +27,7 @@ public class ServerFacade {
 
     public RegisterResult register(RegisterRequest request) throws ResponseException {
         var path = "/user";
-        var response = this.makeRequest("POST", path, request, RegisterResult.class);
+        RegisterResult response = this.makeRequest("POST", path, request, RegisterResult.class);
         authToken = response.authToken();
         return response;
     }
@@ -33,6 +35,13 @@ public class ServerFacade {
     public void clear() throws ResponseException {
         var path = "/db";
         this.makeRequest("DELETE", path, null, ClearResult.class);
+    }
+
+    public LoginResult login(LoginRequest request) throws ResponseException {
+        var path = "/session";
+        LoginResult response = this.makeRequest("POST", path, request, response.LoginResult.class);
+        authToken = response.authToken();
+        return response;
     }
 
 

@@ -3,7 +3,9 @@ package client;
 import dataaccess.ResponseException;
 import model.UserData;
 import org.junit.jupiter.api.*;
+import request.LoginRequest;
 import request.RegisterRequest;
+import response.LoginResult;
 import response.RegisterResult;
 import server.Server;
 import serverFacade.ServerFacade;
@@ -52,6 +54,19 @@ public class ServerFacadeTests {
         assertThrows(ResponseException.class, () -> serverFacade.register(user));
     }
 
+    @Test
+    public void passLogin() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        LoginResult response = serverFacade.login(request);
+        assertEquals("username", response.username());
+    }
 
+    @Test
+    public void failLogin() throws ResponseException {
+        LoginRequest request = new LoginRequest(testUser.username(), testUser.password());
+        assertThrows(ResponseException.class, () -> serverFacade.login(request));
+    }
 
 }
