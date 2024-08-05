@@ -9,6 +9,7 @@ import server.Server;
 import serverFacade.ServerFacade;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class ServerFacadeTests {
@@ -38,15 +39,19 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
-    }
-
-    @Test
     public void passRegister() throws ResponseException {
         RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
         RegisterResult response = serverFacade.register(user);
         assertEquals("username", response.username());
     }
+
+    @Test
+    public void failRegister() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        assertThrows(ResponseException.class, () -> serverFacade.register(user));
+    }
+
+
 
 }
