@@ -77,4 +77,9 @@ public class ServerFacadeTests {
         serverFacade.logout();
         assertNull(serverFacade.getAuthToken());
     }
+
+    @Test
+    public void failLogout() throws ResponseException {
+        assertThrows(ResponseException.class, () -> serverFacade.logout());
+    }
 }
