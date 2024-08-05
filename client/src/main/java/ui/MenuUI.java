@@ -58,13 +58,35 @@ public class MenuUI {
         throw new ResponseException(400, "Expected: <username> <password>");
     }
 
+    public String logout(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length == 0) {
+            server.logout();
+            state = State.SIGNEDOUT;
+            return "You successfully logged out.";
+        }
+        throw new ResponseException(400, "There was an error logging you out.");
+    }
+
     public String help() {
-        return """
+        if (state == State.SIGNEDOUT) {
+            return """
                 - register <username> <password> <email> - to create an account
                 - login <username> <password> - to play chess
                 - quit - playing chess
                 - help - with possible commands
                 """;
+        }
+        return """
+                - create <name> - game
+                - list - games
+                - join <ID> [WHITE | BLACK] - a game
+                - observe <ID> - a game
+                - logout - when you're done
+                - quit playing chess
+                - help - with possible commands
+                """;
+
     }
 
     private void assertSignedIn() throws ResponseException {

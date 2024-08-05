@@ -5,6 +5,7 @@ import dataaccess.ResponseException;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.LoginResult;
+import response.LogoutResult;
 import response.RegisterResult;
 import response.ClearResult;
 
@@ -44,7 +45,10 @@ public class ServerFacade {
         return response;
     }
 
-
+    public void logout() throws ResponseException {
+        var path = "/session";
+        this.makeRequest("DELETE", path, null, LogoutResult.class);
+    }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass)
             throws ResponseException {
