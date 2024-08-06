@@ -3,6 +3,7 @@ package serverFacade;
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.*;
@@ -56,8 +57,12 @@ public class ServerFacade {
 
     public ListGamesResult listGames() throws ResponseException {
         var path = "/game";
-        ListGamesResult response = this.makeRequest("GET", path, null, ListGamesResult.class);
-        return response;
+        return this.makeRequest("GET", path, null, ListGamesResult.class);
+    }
+
+    public void joinGame(JoinGameRequest request) throws ResponseException {
+        var path = "/game";
+        this.makeRequest("PUT", path, request, JoinGameResult.class);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass)

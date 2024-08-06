@@ -1,9 +1,11 @@
 package ui;
 
+import chess.ChessGame;
 import dataaccess.ResponseException;
 import handlers.GameHandler;
 import model.GameData;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import serverFacade.ServerFacade;
@@ -19,6 +21,9 @@ public class MenuUI {
     private static String authToken;
     private State state = State.SIGNEDOUT;
     private Collection<GameData> gameList;
+    private int gameID;
+    private ChessGame.TeamColor playerColor;
+    private CreateBoard chessBoard;
 
     public MenuUI(String url) throws ResponseException {
         server = new ServerFacade(url);
@@ -36,6 +41,7 @@ public class MenuUI {
                 case "logout" -> logout(params);
                 case "create" -> createGame(params);
                 case "list" -> listGames(params);
+                case "join" -> joinGame(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -121,6 +127,33 @@ public class MenuUI {
             return gameInfo.toString();
         }
         throw new ResponseException(400, "There was an error printing list of games.");
+    }
+
+    public String joinGame(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length >= 1) {
+            gameID = Integer.parseInt(params[0]);
+            playerColor = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
+            JoinGameRequest joinRequest = new JoinGameRequest(params[1].toUpperCase(), gameID);
+            server.joinGame(joinRequest);
+            findGame(gameID);
+            state = State.GAMEMODE;
+            return String.format("Successfully joined game %s as %s.", params[0], params[1].toUpperCase());
+        }
+        throw new ResponseException(400, "Expected: <gameID> <WHITE | BLACK>");
+    }
+
+    public String observeGame(String... params) throws ResponseException {
+        assertSignedIn();
+        return "Hi";
+    }
+
+    private void findGame(int id) {
+        for (GameData game : gameList) {
+            if (game.gameID() == gameID) {
+                chessBoard = new CreateBoard(game.game());
+            }
+        }
     }
 
     public String help() {
