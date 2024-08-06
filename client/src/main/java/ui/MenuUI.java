@@ -1,6 +1,7 @@
 package ui;
 
 import dataaccess.ResponseException;
+import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import serverFacade.ServerFacade;
@@ -27,6 +28,8 @@ public class MenuUI {
             return switch (cmd) {
                 case "register" -> register(params);
                 case "login" -> login(params);
+                case "logout" -> logout(params);
+                case "create" -> createGame(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -66,6 +69,21 @@ public class MenuUI {
             return "You successfully logged out.";
         }
         throw new ResponseException(400, "There was an error logging you out.");
+    }
+
+    public String createGame(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length == 0) {
+            StringBuilder name = new StringBuilder(params[0]);
+            for (int i = 1; i < params.length; i++) {
+                name.append(" ");
+                name.append(params[i]);
+            }
+            CreateGameRequest newGame = new CreateGameRequest(params[0]);
+            server.createGame(newGame);
+            return String.format("Created game with the following name: %s.", name);
+        }
+        throw new ResponseException(400, "Couldn't create game");
     }
 
     public String help() {

@@ -2,12 +2,10 @@ package serverFacade;
 
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
+import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
-import response.LoginResult;
-import response.LogoutResult;
-import response.RegisterResult;
-import response.ClearResult;
+import response.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +47,11 @@ public class ServerFacade {
         var path = "/session";
         this.makeRequest("DELETE", path, null, LogoutResult.class);
         authToken = null;
+    }
+
+    public void createGame(CreateGameRequest request) throws ResponseException {
+        var path = "/game";
+        this.makeRequest("POST", path, request, CreateGameResult.class);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass)

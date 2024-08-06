@@ -3,6 +3,7 @@ package client;
 import dataaccess.ResponseException;
 import model.UserData;
 import org.junit.jupiter.api.*;
+import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.LoginResult;
@@ -81,5 +82,22 @@ public class ServerFacadeTests {
     @Test
     public void failLogout() throws ResponseException {
         assertThrows(ResponseException.class, () -> serverFacade.logout());
+    }
+
+    @Test
+    public void passCreateGame() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        serverFacade.login(request);
+        CreateGameRequest game = new CreateGameRequest("new game");
+        serverFacade.createGame(game);
+        assertEquals("new game", game.gameName());
+    }
+
+    @Test
+    public void failCreateGame() throws ResponseException {
+        CreateGameRequest game = new CreateGameRequest("new game");
+        assertThrows(ResponseException.class, () -> serverFacade.createGame(game));
     }
 }
