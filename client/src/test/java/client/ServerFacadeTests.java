@@ -11,7 +11,7 @@ import request.RegisterRequest;
 import response.LoginResult;
 import response.RegisterResult;
 import server.Server;
-import serverFacade.ServerFacade;
+import serverfacade.ServerFacade;
 
 import static org.junit.jupiter.api.Assertions.*;
 

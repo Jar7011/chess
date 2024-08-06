@@ -7,8 +7,8 @@ import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
-import serverFacade.ServerFacade;
-import serverFacade.State;
+import serverfacade.ServerFacade;
+import serverfacade.State;
 
 import java.util.Arrays;
 import java.util.Collection;

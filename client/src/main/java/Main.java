@@ -1,6 +1,6 @@
 import chess.*;
 import exception.ResponseException;
-import serverFacade.Repl;
+import serverfacade.Repl;
 
 public class Main {
     public static void main(String[] args) throws ResponseException {
