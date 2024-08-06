@@ -101,5 +101,24 @@ public class ServerFacadeTests {
         assertThrows(ResponseException.class, () -> serverFacade.createGame(game));
     }
 
+    @Test
+    public void passListGames() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        serverFacade.login(request);
+        CreateGameRequest game = new CreateGameRequest("new game");
+        serverFacade.createGame(game);
+        CreateGameRequest otherGame = new CreateGameRequest("another game");
+        serverFacade.createGame(otherGame);
+        assertEquals(2, serverFacade.listGames().games().size());
+        System.out.println(serverFacade.listGames());
+    }
+
+    @Test
+    public void failListGames() throws ResponseException {
+        assertThrows(ResponseException.class, () -> serverFacade.listGames());
+    }
+
 
 }
