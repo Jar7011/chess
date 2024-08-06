@@ -1,6 +1,7 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessPiece;
 import exception.ResponseException;
 import model.GameData;
 import request.CreateGameRequest;
@@ -23,9 +24,9 @@ public class MenuUI {
     private int gameID;
     private ChessGame.TeamColor playerColor;
 
-    public MenuUI(String url) throws ResponseException {
+    public MenuUI(String url) {
         server = new ServerFacade(url);
-        gameList = server.listGames().games();
+        //gameList = server.listGames().games();
     }
 
     public String eval(String input) {

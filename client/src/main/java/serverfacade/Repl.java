@@ -9,7 +9,7 @@ public class Repl {
 
     public MenuUI menu;
 
-    public Repl(String serverUrl) throws ResponseException {
+    public Repl(String serverUrl) {
         menu = new MenuUI(serverUrl);
     }
 
