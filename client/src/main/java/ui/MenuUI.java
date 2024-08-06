@@ -2,7 +2,6 @@ package ui;
 
 import chess.ChessGame;
 import dataaccess.ResponseException;
-import handlers.GameHandler;
 import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
@@ -23,7 +22,6 @@ public class MenuUI {
     private Collection<GameData> gameList;
     private int gameID;
     private ChessGame.TeamColor playerColor;
-    private CreateBoard chessBoard;
 
     public MenuUI(String url) throws ResponseException {
         server = new ServerFacade(url);
@@ -42,6 +40,7 @@ public class MenuUI {
                 case "create" -> createGame(params);
                 case "list" -> listGames(params);
                 case "join" -> joinGame(params);
+                case "observe" -> observeGame(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -137,7 +136,7 @@ public class MenuUI {
             JoinGameRequest joinRequest = new JoinGameRequest(params[1].toUpperCase(), gameID);
             server.joinGame(joinRequest);
             findGame(gameID);
-            state = State.GAMEMODE;
+            state = State.GAMEPLAY;
             return String.format("Successfully joined game %s as %s.", params[0], params[1].toUpperCase());
         }
         throw new ResponseException(400, "Expected: <gameID> <WHITE | BLACK>");
@@ -145,13 +144,22 @@ public class MenuUI {
 
     public String observeGame(String... params) throws ResponseException {
         assertSignedIn();
-        return "Hi";
+        if (params.length >= 1) {
+            gameID = Integer.parseInt(params[0]);
+            playerColor = null;
+            JoinGameRequest joinRequest = new JoinGameRequest(null, gameID);
+            server.joinGame(joinRequest);
+            findGame(gameID);
+            state = State.GAMEPLAY;
+            return String.format("You're now observing game %s.", params[0]);
+        }
+        throw new ResponseException(400, "Expected: <gameID>");
     }
 
     private void findGame(int id) {
         for (GameData game : gameList) {
             if (game.gameID() == gameID) {
-                chessBoard = new CreateBoard(game.game());
+                CreateBoard chessBoard = new CreateBoard(game.game());
             }
         }
     }
