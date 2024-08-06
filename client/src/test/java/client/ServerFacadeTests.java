@@ -100,4 +100,6 @@ public class ServerFacadeTests {
         CreateGameRequest game = new CreateGameRequest("new game");
         assertThrows(ResponseException.class, () -> serverFacade.createGame(game));
     }
+
+
 }

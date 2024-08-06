@@ -1,6 +1,8 @@
 package ui;
 
 import dataaccess.ResponseException;
+import handlers.GameHandler;
+import model.GameData;
 import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
@@ -8,16 +10,19 @@ import serverFacade.ServerFacade;
 import serverFacade.State;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class MenuUI {
 
     private final ServerFacade server;
-    public static String username;
-    public static String authToken;
+    private static String username;
+    private static String authToken;
     private State state = State.SIGNEDOUT;
+    private Collection<GameData> gameList;
 
-    public MenuUI(String url) {
+    public MenuUI(String url) throws ResponseException {
         server = new ServerFacade(url);
+        gameList = server.listGames().games();
     }
 
     public String eval(String input) {
@@ -30,6 +35,7 @@ public class MenuUI {
                 case "login" -> login(params);
                 case "logout" -> logout(params);
                 case "create" -> createGame(params);
+                case "list" -> listGames(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -81,9 +87,40 @@ public class MenuUI {
             }
             CreateGameRequest newGame = new CreateGameRequest(params[0]);
             server.createGame(newGame);
+            gameList = server.listGames().games();
             return String.format("Created game with the following name: %s.", name);
         }
         throw new ResponseException(400, "Couldn't create game");
+    }
+
+    public String listGames(String... params) throws ResponseException {
+        assertSignedIn();
+        if (params.length == 0) {
+            StringBuilder gameInfo = new StringBuilder();
+            gameList = server.listGames().games();
+            int i = 1;
+
+            for (GameData game : gameList) {
+                gameInfo.append("Game ");
+                gameInfo.append(i);
+                gameInfo.append("\n");
+                gameInfo.append("Game ID - ");
+                gameInfo.append(game.gameID());
+                gameInfo.append("\n");
+                gameInfo.append("White username - ");
+                gameInfo.append(game.whiteUsername());
+                gameInfo.append("\n");
+                gameInfo.append("Black username - ");
+                gameInfo.append(game.blackUsername());
+                gameInfo.append("\n");
+                gameInfo.append("Game name - ");
+                gameInfo.append(game.gameName());
+                gameInfo.append("\n");
+                i++;
+            }
+            return gameInfo.toString();
+        }
+        throw new ResponseException(400, "There was an error printing list of games.");
     }
 
     public String help() {

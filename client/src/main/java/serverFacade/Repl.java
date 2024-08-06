@@ -1,5 +1,6 @@
 package serverFacade;
 
+import dataaccess.ResponseException;
 import ui.MenuUI;
 import static ui.EscapeSequences.*;
 import java.util.Scanner;
@@ -8,7 +9,7 @@ public class Repl {
 
     public MenuUI menu;
 
-    public Repl(String serverUrl) {
+    public Repl(String serverUrl) throws ResponseException {
         menu = new MenuUI(serverUrl);
     }
 
