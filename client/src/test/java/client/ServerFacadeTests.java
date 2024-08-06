@@ -1,9 +1,10 @@
 package client;
 
-import dataaccess.ResponseException;
+import dataaccess.*;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.LoginResult;
@@ -18,6 +19,9 @@ public class ServerFacadeTests {
 
     private static Server server;
     private static ServerFacade serverFacade;
+
+    AuthDAO authorization = new SQLAuthDAO();
+    GameDAO gameData = new SQLGameDAO(authorization);
 
     private final UserData testUser = new UserData("username", "password", "email");
 
@@ -120,5 +124,28 @@ public class ServerFacadeTests {
         assertThrows(ResponseException.class, () -> serverFacade.listGames());
     }
 
+    @Test
+    public void passJoinGame() throws ResponseException, DataAccessException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        serverFacade.login(request);
+        CreateGameRequest game = new CreateGameRequest("new game");
+        serverFacade.createGame(game);
+        JoinGameRequest joinRequest = new JoinGameRequest("BLACK", 1);
+        serverFacade.joinGame(joinRequest);
+        assertEquals(testUser.username(), gameData.getGame(1).blackUsername());
+    }
 
+    @Test
+    public void failJoinGame() throws ResponseException {
+        RegisterRequest user = new RegisterRequest(testUser.username(), testUser.password(), testUser.email());
+        serverFacade.register(user);
+        LoginRequest request = new LoginRequest(user.username(), user.password());
+        serverFacade.login(request);
+        CreateGameRequest game = new CreateGameRequest("new game");
+        serverFacade.createGame(game);
+        JoinGameRequest joinRequest = new JoinGameRequest("BLACK", 2);
+        assertThrows(ResponseException.class, () -> serverFacade.joinGame(joinRequest));
+    }
 }
