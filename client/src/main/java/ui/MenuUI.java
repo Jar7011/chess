@@ -1,7 +1,7 @@
 package ui;
 
 import chess.ChessGame;
-import dataaccess.ResponseException;
+import exception.ResponseException;
 import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;

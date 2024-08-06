@@ -1,7 +1,7 @@
 package serverFacade;
 
 import com.google.gson.Gson;
-import dataaccess.ResponseException;
+import exception.ResponseException;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;

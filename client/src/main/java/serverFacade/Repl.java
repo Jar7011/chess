@@ -1,6 +1,6 @@
 package serverFacade;
 
-import dataaccess.ResponseException;
+import exception.ResponseException;
 import ui.MenuUI;
 import static ui.EscapeSequences.*;
 import java.util.Scanner;
