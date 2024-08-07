@@ -87,6 +87,10 @@ public class ChessBoard {
         return boardClone;
     }
 
+    public ChessPiece[][] getBoard() {
+        return squares;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {return true;}

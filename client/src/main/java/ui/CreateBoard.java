@@ -13,7 +13,7 @@ public class CreateBoard {
     private PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
     public CreateBoard(ChessGame chessGame) {
-        game = chessGame;
+        board = chessGame.getBoard().getBoard();
     }
 
     public void createRegBoard() {

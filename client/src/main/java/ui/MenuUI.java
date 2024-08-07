@@ -23,6 +23,7 @@ public class MenuUI {
     private Collection<GameData> gameList;
     private int gameID;
     private ChessGame.TeamColor playerColor;
+    private CreateBoard chessBoard;
 
     public MenuUI(String url) {
         server = new ServerFacade(url);
@@ -138,6 +139,8 @@ public class MenuUI {
             server.joinGame(joinRequest);
             findGame(gameID);
             state = State.GAMEPLAY;
+            chessBoard.createRegBoard();
+            chessBoard.createInvertedBoard();
             return String.format("Successfully joined game %s as %s.", params[0], params[1].toUpperCase());
         }
         throw new ResponseException(400, "Expected: <gameID> <WHITE | BLACK>");
@@ -152,6 +155,8 @@ public class MenuUI {
             server.joinGame(joinRequest);
             findGame(gameID);
             state = State.GAMEPLAY;
+            chessBoard.createRegBoard();
+            chessBoard.createInvertedBoard();
             return String.format("You're now observing game %s.", params[0]);
         }
         throw new ResponseException(400, "Expected: <gameID>");
@@ -160,7 +165,7 @@ public class MenuUI {
     private void findGame(int id) {
         for (GameData game : gameList) {
             if (game.gameID() == gameID) {
-                CreateBoard chessBoard = new CreateBoard(game.game());
+                chessBoard = new CreateBoard(game.game());
             }
         }
     }
