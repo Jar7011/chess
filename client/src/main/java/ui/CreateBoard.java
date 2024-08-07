@@ -39,21 +39,48 @@ public class CreateBoard {
         out.print(SET_BG_COLOR_WHITE);
     }
 
+    public void createInvertedBoard() {
+        drawLettersInverted();
+        int rowNum = 7;
+
+        for (ChessPiece[] row : board) {
+            drawSideNumInverted(7 - rowNum);
+            int colNum = 7;
+
+            for (ChessPiece col : row) {
+                createSquare(rowNum, colNum);
+                colNum--;
+            }
+
+            drawSideNumInverted(7 - rowNum);
+            setBlack();
+            out.print("\n");
+            rowNum--;
+        }
+
+        drawLettersInverted();
+        out.print(SET_BG_COLOR_WHITE);
+    }
+
     private void drawLetters() {
+        setLightGray();
         out.print("    a   b   c   d   e   f   g   h     ");
         out.print("\n");
     }
 
     private void drawLettersInverted() {
+        setLightGray();
         out.print("    h   g   f   e   d   c   b   a     ");
         out.print("\n");
     }
 
     private void drawSideNum(int row) {
+        setLightGray();
         out.print(" " + (row + 1) + " ");
     }
 
     private void drawSideNumInverted(int row) {
+        setLightGray();
         out.print(" " + (8 - row) + " ");
     }
 
@@ -85,6 +112,11 @@ public class CreateBoard {
         out.print(" ");
     }
 
+    private void setLightGray() {
+        out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLACK);
+    }
+
     private void setBlack() {
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLACK);
@@ -92,11 +124,6 @@ public class CreateBoard {
 
     private void setWhite() {
         out.print(SET_BG_COLOR_WHITE);
-        out.print(SET_TEXT_COLOR_BLACK);
-    }
-
-    private void setLightGray() {
-        out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
