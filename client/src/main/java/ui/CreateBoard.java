@@ -17,11 +17,12 @@ public class CreateBoard {
     }
 
     public void createRegBoard() {
+        out.print("\n");
         drawLetters();
         int rowNum = 0;
 
         for (ChessPiece[] row : board) {
-            drawSideNum(rowNum);
+            drawSideNumInverted(rowNum);
             int colNum = 0;
 
             for (ChessPiece col : row) {
@@ -32,20 +33,20 @@ public class CreateBoard {
             drawSideNum(rowNum);
             setBlack();
             out.print("\n");
-            out.print("\n");
             rowNum++;
         }
 
         drawLetters();
-        out.print(SET_BG_COLOR_WHITE);
+        out.print(RESET_BG_COLOR);
     }
 
     public void createInvertedBoard() {
+        out.print("\n");
         drawLettersInverted();
         int rowNum = 7;
 
         for (ChessPiece[] row : board) {
-            drawSideNumInverted(7 - rowNum);
+            drawSideNum(7 - rowNum);
             int colNum = 7;
 
             for (ChessPiece col : row) {
@@ -56,23 +57,24 @@ public class CreateBoard {
             drawSideNumInverted(7 - rowNum);
             setBlack();
             out.print("\n");
-            out.print("\n");
             rowNum--;
         }
 
         drawLettersInverted();
-        out.print(SET_BG_COLOR_WHITE);
+        out.print(RESET_BG_COLOR);
     }
 
     private void drawLetters() {
         setLightGray();
-        out.print("    a   b   c   d   e   f   g   h     ");
+        out.print("    a  b  c  d  e  f  g  h    ");
+        setBlack();
         out.print("\n");
     }
 
     private void drawLettersInverted() {
         setLightGray();
-        out.print("    h   g   f   e   d   c   b   a     ");
+        out.print("    h  g  f  e  d  c  b  a    ");
+        setBlack();
         out.print("\n");
     }
 
@@ -100,7 +102,7 @@ public class CreateBoard {
     private void fillSquare(ChessPiece chessPiece) {
         out.print(" ");
         if (chessPiece == null) {
-            out.print("  ");
+            out.print(" ");
         }
         else {
             if (chessPiece.getTeamColor() == ChessGame.TeamColor.BLACK) {
