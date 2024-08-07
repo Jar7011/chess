@@ -8,7 +8,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 public class CreateBoard {
-    //ChessGame game;
     private ChessPiece[][] board;
     private PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
@@ -19,10 +18,10 @@ public class CreateBoard {
     public void createRegBoard() {
         out.print("\n");
         drawLetters();
-        int rowNum = 0;
+        int rowNum = 7;
 
         for (ChessPiece[] row : board) {
-            drawSideNumInverted(rowNum);
+            drawSideNum(rowNum);
             int colNum = 0;
 
             for (ChessPiece col : row) {
@@ -33,7 +32,7 @@ public class CreateBoard {
             drawSideNum(rowNum);
             setBlack();
             out.print("\n");
-            rowNum++;
+            rowNum--;
         }
 
         drawLetters();
@@ -43,10 +42,10 @@ public class CreateBoard {
     public void createInvertedBoard() {
         out.print("\n");
         drawLettersInverted();
-        int rowNum = 7;
+        int rowNum = 0;
 
         for (ChessPiece[] row : board) {
-            drawSideNum(7 - rowNum);
+            drawSideNumInverted(7 - rowNum);
             int colNum = 7;
 
             for (ChessPiece col : row) {
@@ -57,7 +56,7 @@ public class CreateBoard {
             drawSideNumInverted(7 - rowNum);
             setBlack();
             out.print("\n");
-            rowNum--;
+            rowNum++;
         }
 
         drawLettersInverted();
@@ -78,19 +77,19 @@ public class CreateBoard {
         out.print("\n");
     }
 
-    private void drawSideNum(int row) {
+    private void drawSideNumInverted(int row) {
         setLightGray();
         out.print(" " + (row + 1) + " ");
     }
 
-    private void drawSideNumInverted(int row) {
+    private void drawSideNum(int row) {
         setLightGray();
         out.print(" " + (8 - row) + " ");
     }
 
     private void createSquare(int row, int col) {
         ChessPiece piece = board[row][col];
-        if ((row + col) % 2 != 0) {
+        if ((row + col) % 2 == 0) {
             setBlack();
         }
         else {
