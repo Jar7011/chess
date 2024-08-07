@@ -8,7 +8,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 public class CreateBoard {
-    ChessGame game;
+    //ChessGame game;
     private ChessPiece[][] board;
     private PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
@@ -32,6 +32,7 @@ public class CreateBoard {
             drawSideNum(rowNum);
             setBlack();
             out.print("\n");
+            out.print("\n");
             rowNum++;
         }
 
@@ -54,6 +55,7 @@ public class CreateBoard {
 
             drawSideNumInverted(7 - rowNum);
             setBlack();
+            out.print("\n");
             out.print("\n");
             rowNum--;
         }

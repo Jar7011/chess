@@ -81,6 +81,30 @@ public class ChessPiece {
         return new ArrayList<>();
     }
 
+    public String toString() {
+        if (type == PieceType.PAWN) {
+            return "P";
+        }
+        else if (type == PieceType.ROOK) {
+            return "R";
+        }
+        else if (type == PieceType.KNIGHT) {
+            return "N";
+        }
+        else if (type == PieceType.BISHOP) {
+            return "B";
+        }
+        else if (type == PieceType.QUEEN) {
+            return "Q";
+        }
+        else if (type == PieceType.KING) {
+            return "K";
+        }
+        else {
+            return "X";
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {return true;}
