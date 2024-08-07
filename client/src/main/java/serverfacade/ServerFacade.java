@@ -39,7 +39,7 @@ public class ServerFacade {
 
     public LoginResult login(LoginRequest request) throws ResponseException {
         var path = "/session";
-        LoginResult response = this.makeRequest("POST", path, request, response.LoginResult.class);
+        LoginResult response = this.makeRequest("POST", path, request, LoginResult.class);
         authToken = response.authToken();
         return response;
     }

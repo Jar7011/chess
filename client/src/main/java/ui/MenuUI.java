@@ -26,7 +26,6 @@ public class MenuUI {
 
     public MenuUI(String url) {
         server = new ServerFacade(url);
-        //gameList = server.listGames().games();
     }
 
     public String eval(String input) {
@@ -85,7 +84,7 @@ public class MenuUI {
 
     public String createGame(String... params) throws ResponseException {
         assertSignedIn();
-        if (params.length == 0) {
+        if (params.length >= 1) {
             StringBuilder name = new StringBuilder(params[0]);
             for (int i = 1; i < params.length; i++) {
                 name.append(" ");
@@ -105,24 +104,25 @@ public class MenuUI {
             StringBuilder gameInfo = new StringBuilder();
             gameList = server.listGames().games();
             int i = 1;
-
-            for (GameData game : gameList) {
-                gameInfo.append("Game ");
-                gameInfo.append(i);
-                gameInfo.append("\n");
-                gameInfo.append("Game ID - ");
-                gameInfo.append(game.gameID());
-                gameInfo.append("\n");
-                gameInfo.append("White username - ");
-                gameInfo.append(game.whiteUsername());
-                gameInfo.append("\n");
-                gameInfo.append("Black username - ");
-                gameInfo.append(game.blackUsername());
-                gameInfo.append("\n");
-                gameInfo.append("Game name - ");
-                gameInfo.append(game.gameName());
-                gameInfo.append("\n");
-                i++;
+            if (!gameList.isEmpty()) {
+                for (GameData game : gameList) {
+                    gameInfo.append("Game ");
+                    gameInfo.append(i);
+                    gameInfo.append("\n");
+                    gameInfo.append("Game ID - ");
+                    gameInfo.append(game.gameID());
+                    gameInfo.append("\n");
+                    gameInfo.append("White username - ");
+                    gameInfo.append(game.whiteUsername());
+                    gameInfo.append("\n");
+                    gameInfo.append("Black username - ");
+                    gameInfo.append(game.blackUsername());
+                    gameInfo.append("\n");
+                    gameInfo.append("Game name - ");
+                    gameInfo.append(game.gameName());
+                    gameInfo.append("\n");
+                    i++;
+                }
             }
             return gameInfo.toString();
         }
