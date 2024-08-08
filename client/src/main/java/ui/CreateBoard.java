@@ -21,7 +21,7 @@ public class CreateBoard {
         int rowNum = 7;
 
         for (ChessPiece[] row : board) {
-            drawSideNum(rowNum);
+            drawSideNumInverted(rowNum);
             int colNum = 0;
 
             for (ChessPiece col : row) {
@@ -29,7 +29,7 @@ public class CreateBoard {
                 colNum++;
             }
 
-            drawSideNum(rowNum);
+            drawSideNumInverted(rowNum);
             setBlack();
             out.print("\n");
             rowNum--;
@@ -45,7 +45,7 @@ public class CreateBoard {
         int rowNum = 0;
 
         for (ChessPiece[] row : board) {
-            drawSideNumInverted(7 - rowNum);
+            drawSideNum(7 - rowNum);
             int colNum = 7;
 
             for (ChessPiece col : row) {
@@ -53,7 +53,7 @@ public class CreateBoard {
                 colNum--;
             }
 
-            drawSideNumInverted(7 - rowNum);
+            drawSideNum(7 - rowNum);
             setBlack();
             out.print("\n");
             rowNum++;
