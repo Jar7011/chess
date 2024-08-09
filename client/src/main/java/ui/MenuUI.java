@@ -115,9 +115,6 @@ public class MenuUI {
                     gameInfo.append("Game ");
                     gameInfo.append(i);
                     gameInfo.append("\n");
-                    //gameInfo.append("Game ID - ");
-                    //gameInfo.append(game.gameID());
-                    //gameInfo.append("\n");
                     gameInfo.append("White username - ");
                     gameInfo.append(game.whiteUsername());
                     gameInfo.append("\n");
@@ -139,12 +136,6 @@ public class MenuUI {
         assertSignedIn();
         if (params.length >= 1) {
             int gameNum = Integer.parseInt(params[0])-1;
-//            if (params.length > 2) {
-//                throw new ResponseException(400, "Expected: <gameID> <WHITE | BLACK>");
-//            }
-//            if (gameNum < 1 || gameNum > gameList.size()) {
-//                throw new ResponseException(400, "That game doesn't exist");
-//            }
             gameID = gameList.get(gameNum).gameID();
             playerColor = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
             JoinGameRequest joinRequest = new JoinGameRequest(params[1].toUpperCase(), gameID);
