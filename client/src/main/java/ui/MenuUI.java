@@ -27,6 +27,7 @@ public class MenuUI {
     private ChessGame.TeamColor playerColor;
     private CreateBoard chessBoard;
 
+
     public MenuUI(String url) {
         server = new ServerFacade(url);
     }
