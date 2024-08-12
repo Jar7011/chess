@@ -44,6 +44,14 @@ public class Sessions {
         }
     }
 
+    public void broadcastMessage(int gameID, ServerMessage message, String exceptThisAuth) throws IOException {
+        sendMessageToAllSessions(gameID, message, exceptThisAuth);
+    }
+
+    public void broadcastMessageAll(int gameID, ServerMessage message) throws IOException {
+        sendMessageToAllSessions(gameID, message, null);
+    }
+
     private void sendMessageToAllSessions(int gameID, ServerMessage message, String notThisAuth) throws IOException {
         String messageJSON = new Gson().toJson(message);
         ConcurrentHashMap<String, Session> relevantSessions = sessionsInGame.get(gameID);
@@ -56,13 +64,5 @@ public class Sessions {
                 }
             }
         }
-    }
-
-    public void broadcastMessage(int gameID, ServerMessage message, String exceptThisAuth) throws IOException {
-        sendMessageToAllSessions(gameID, message, exceptThisAuth);
-    }
-
-    public void broadcastMessageAll(int gameID, ServerMessage message) throws IOException {
-        sendMessageToAllSessions(gameID, message, null);
     }
 }
