@@ -65,25 +65,6 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-//    public void leaveGame(String authToken, int gameID) throws ResponseException {
-//        try {
-//            var action = new Leave(authToken, gameID);
-//            session.getBasicRemote().sendText(new Gson().toJson(action));
-//        }
-//        catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
-//    }
-//
-//    public void resignGame(String authToken, int gameID) throws ResponseException {
-//        try {
-//            var action = new Resign(authToken, gameID);
-//            session.getBasicRemote().sendText(new Gson().toJson(action));
-//        }
-//        catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
-//    }
 
     public void makeMove(String authToken, int gameID, ChessMove chessMove) throws ResponseException {
         try {
